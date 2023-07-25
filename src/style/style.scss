@@ -2,6 +2,8 @@
 @import './button.scss';
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;700&display=swap');
 
+
+
 *{
     font-family: "Roboto Condensed", sans-serif;
     margin: 0;
@@ -20,11 +22,11 @@ p {
     margin: 0 auto;
     padding: 50px 0 50px 0;
 
-    .bg_decoration{
-        position: absolute;
-        right: -174px;
-        bottom: -50px;
-        z-index: -1;
+    .bg-decoration{
+        // position: absolute;
+        // right: -174px;
+        // bottom: -50px;
+        // z-index: -1;
     }
 }
 
