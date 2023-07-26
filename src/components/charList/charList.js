@@ -1,9 +1,48 @@
-
+import "./charList.scss";
+import abyss from "../../resources/img/abyss.jpg";
 
 function CharList() {
     return(
-        <>
-        </>
+        <div className="char__list">
+            <ul className="char__grid">
+                <li className="char__item">
+                    <img src={abyss} alt="abyss" className="char__img" />
+                    <div className="char__title">Abyss</div>
+                </li>
+                <li className="char__item">
+                    <img src={abyss} alt="abyss" className="char__img" />
+                    <div className="char__title">Abyss</div>
+                </li>
+                <li className="char__item">
+                    <img src={abyss} alt="abyss" className="char__img" />
+                    <div className="char__title">Abyss</div>
+                </li>
+                <li className="char__item">
+                    <img src={abyss} alt="abyss" className="char__img" />
+                    <div className="char__title">Abyss</div>
+                </li>
+                <li className="char__item">
+                    <img src={abyss} alt="abyss" className="char__img" />
+                    <div className="char__title">Abyss</div>
+                </li>
+                <li className="char__item">
+                    <img src={abyss} alt="abyss" className="char__img" />
+                    <div className="char__title">Abyss</div>
+                </li>
+                <li className="char__item">
+                    <img src={abyss} alt="abyss" className="char__img" />
+                    <div className="char__title">Abyss</div>
+                </li>
+                <li className="char__item">
+                    <img src={abyss} alt="abyss" className="char__img" />
+                    <div className="char__title">Abyss</div>
+                </li>
+                <li className="char__item">
+                    <img src={abyss} alt="abyss" className="char__img" />
+                    <div className="char__title">Abyss</div>
+                </li>
+            </ul>
+        </div>
     );
 }
 

@@ -1,0 +1,36 @@
+@import "../../style/variables.scss";
+
+.char{
+    &__grid{
+        margin-top: 53px;
+        display: grid;
+        grid-template-columns: repeat(3, 200px);
+        column-gap: 25px;
+        row-gap: 30px;
+    }
+
+    &__item{
+        background-color: $dark;
+        height: 318px;
+        transition: 0.3s transform;
+
+        &_selected {
+            box-shadow: 0 5px 20px $main-color;
+            transform: translateY(-8px);
+        }
+    }
+
+    &__img{
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    &__title{
+        color: #FFF;
+        font-size: 22px;
+        font-weight: 700;
+        margin: 15px 0 0 15px;
+        text-transform: uppercase;
+    }
+}
