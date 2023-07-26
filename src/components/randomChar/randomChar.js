@@ -25,8 +25,10 @@ function RandomChar() {
             <div className="randomchar__static">
                     <p className="randomchar__title">Random character for today!<br/>Do you want to get to know him better?</p>
                     <p className="randomchar__title">Or choose another one</p>
-                    <button className="button button__main"></button>
-                    <img src={mjolnir} alt="mjolnir" />   
+                    <button className="button button__main">
+                        <div className="inner">try it</div>
+                    </button>
+                    <img className='randomchar__decoration' src={mjolnir} alt="mjolnir" />   
             </div>
         </div>
     );
