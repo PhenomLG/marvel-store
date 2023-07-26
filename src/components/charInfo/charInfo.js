@@ -1,7 +1,6 @@
 function CharInfo() {
     return(
         <>
-        Hello world
         </>
     );
 }

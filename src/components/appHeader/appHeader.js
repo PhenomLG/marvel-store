@@ -3,7 +3,6 @@
 function AppHeader() {
     return(
         <>
-        Hello world
         </>
     );
 }

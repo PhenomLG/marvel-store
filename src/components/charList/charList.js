@@ -3,7 +3,6 @@
 function CharList() {
     return(
         <>
-        Hello world
         </>
     );
 }

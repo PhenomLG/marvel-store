@@ -1,0 +1,48 @@
+@import '../../style/variables.scss';
+.randomchar {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.25);
+
+    &__block{
+        padding: 35px 40px;
+        display: grid;
+        grid-template-columns: 180px auto;
+        column-gap: 30px;
+    }
+
+    &__img{
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
+    }
+
+    &__info{
+        display: grid;
+        grid-template-rows: minmax(29px, auto);
+        row-gap: 10px;
+
+    }
+
+    &__name{
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 29px;
+        text-transform: uppercase;
+    }
+
+    &__descr{
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 18px;
+    }
+
+    &__btns{
+        display: grid;
+        column-gap: 30px;
+        grid-template-columns: repeat(2, 101px);
+        a{
+            text-decoration: none;
+        }
+    }
+}
