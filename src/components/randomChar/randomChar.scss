@@ -14,7 +14,11 @@
     &__img{
         width: 180px;
         height: 180px;
-        object-fit: cover;
+
+        img{
+            object-fit: cover;
+        }
+
     }
 
     &__info{
@@ -35,6 +39,13 @@
         font-size: 14px;
         font-weight: 400;
         line-height: 18px;
+        width: 265px;
+        height: 90px;
+
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;  
+        overflow: hidden;
     }
 
     &__btns{
