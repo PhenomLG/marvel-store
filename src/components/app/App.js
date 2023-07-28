@@ -16,7 +16,7 @@ function App() {
             <CharList/>
             <CharInfo/>
         </div>
-        {/* <img className="bg-decoration" src={decoration} alt="vision"/> */}
+        <img className="bg-decoration" src={decoration} alt="vision"/>
     </main>
 </div>
   );
