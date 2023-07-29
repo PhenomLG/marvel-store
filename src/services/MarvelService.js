@@ -17,14 +17,15 @@ class MarvelService {
 
     getCharacter = async (id) => {
         let res = await this.getResource(`${this._apiBase}characters/${id}?${this._apiKey}`);
-        if(res.data.results[0].description !== "")
-        {
-            return this._transformCharacter(res.data.results[0]);
-        }
-        else{
-            res = this.getCharacter(Math.floor(Math.random() * (1011400 - 1011000) + 1011000))
-            return res;
-        }
+        return this._transformCharacter(res.data.results[0]);
+        // if(res.data.results[0].description !== "")
+        // {
+        //     return this._transformCharacter(res.data.results[0]);
+        // }
+        // else{
+        //     res = this.getCharacter(Math.floor(Math.random() * (1011400 - 1011000) + 1011000))
+        //     return res;
+        // }
     }
 
     _transformCharacter = (char) => {
