@@ -40,25 +40,25 @@ class CharList extends Component{
         }
     }
 
-    render(){
-        const getChars = chars => 
-            chars.map(item => {
-                const imgStyle = MarvelService.getImageStyle(item.thumbnail);
-                return (
-                    <li onMouseEnter={(e) => {this.toggleSelecting(e)}}
-                        onMouseLeave={(e) => {this.toggleSelecting(e)}}
-                        key={item.id} 
-                        className="char__item">
-                        <img src={item.thumbnail} alt={item.name} style={imgStyle} className="char__img" />
-                        <div className="char__title">{item.name}</div>
-                    </li>
+    renderItems = chars => 
+    chars.map(item => {
+        const imgStyle = MarvelService.getImageStyle(item.thumbnail);
 
-            )})
-        
+        return (
+            <li onMouseEnter={(e) => {this.toggleSelecting(e)}}
+                onMouseLeave={(e) => {this.toggleSelecting(e)}}
+                key={item.id} 
+                className="char__item">
+                <img src={item.thumbnail} alt={item.name} style={imgStyle} className="char__img" />
+                <div className="char__title">{item.name}</div>
+            </li>
+    )});
+
+    render(){  
         return (
             <div className="char__list">
                 <ul className="char__grid">
-                    {getChars(this.state.chars)}
+                    {this.renderItems(this.state.chars)}
                 </ul>
                  <button className="button button__main button__long">
                     <div className="inner">load more</div>
