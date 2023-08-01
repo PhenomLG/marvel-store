@@ -40,6 +40,7 @@ class CharList extends Component{
         }
     }
 
+    // формирование массива элементов li
     renderItems = chars => 
     chars.map(item => {
         const imgStyle = MarvelService.getImageStyle(item.thumbnail);
@@ -47,6 +48,7 @@ class CharList extends Component{
         return (
             <li onMouseEnter={(e) => {this.toggleSelecting(e)}}
                 onMouseLeave={(e) => {this.toggleSelecting(e)}}
+                onClick={() => this.props.onCharSelected(item.id)}
                 key={item.id} 
                 className="char__item">
                 <img src={item.thumbnail} alt={item.name} style={imgStyle} className="char__img" />

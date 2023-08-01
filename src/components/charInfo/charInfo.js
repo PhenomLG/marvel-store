@@ -1,13 +1,58 @@
 import { Component } from "react";
 import "./charInfo.scss";
 import thor from "../../resources/img/thor.png";
+import MarvelService from "../../services/MarvelService";
 
 
 
 class CharInfo extends Component{
+    state = {
+        char: {},
+        loading: false,
+        error: false
+    }
+    marvelService = new MarvelService();
 
+    updateChar = () => {
+        const {charId} = this.props;
+        if(!charId)
+            return;
+        
+        this.onCharLoading();
+        this.marvelService
+        .getCharacter(charId)
+        .then(this.onCharLoaded)
+        .catch(this.onError);    
+    }
+
+    onCharLoaded = (char) => { 
+        this.setState(
+            {
+                char, 
+                loading: false
+            });
+    }
+
+    onCharLoading = () => {
+        this.setState({
+            loading: true
+        })
+    }
+
+    onError = () => {
+        this.setState(
+            {
+                loading: false,
+                error: true,
+            });
+    }
+
+    componentDidMount(){
+        this.updateChar();
+    }
 
     render(){
+
         return(
             <div className="char__info">
                 <div className="char__card">

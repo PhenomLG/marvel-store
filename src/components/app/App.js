@@ -4,7 +4,6 @@ import AppHeader from '../appHeader/appHeader';
 import RandomChar from '../randomChar/randomChar';
 import CharList from '../charList/charList';
 import CharInfo from '../charInfo/charInfo';
-
 import decoration from '../../resources/img/vision.png';
 
 
@@ -14,6 +13,7 @@ class App extends Component {
   }
 
   onCharSelected = (id) => {
+    console.log(id);
     this.setState({
       selectedChar: id
     })
