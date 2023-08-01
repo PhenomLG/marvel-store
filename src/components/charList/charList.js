@@ -41,7 +41,6 @@ class CharList extends Component{
     }
 
     render(){
-
         const getChars = chars => 
             chars.map(item => {
                 const imgStyle = MarvelService.getImageStyle(item.thumbnail);
