@@ -19,10 +19,7 @@ class CharList extends Component{
     updateChars = () => {
         this.marvelService.getAllCharacters()
         .then(chars => {
-            const charsWithId = chars.map((char, index) => {
-                return {...char, id: index};
-            })
-            this.onCharsLoaded(charsWithId);
+            this.onCharsLoaded(chars);
         });
     }
 
