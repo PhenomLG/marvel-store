@@ -1,10 +1,12 @@
-import { Component, Fragment } from "react";
+import { Component } from "react";
+import Spinner from "../spinner/spinner";
 import "./charList.scss";
 import MarvelService from "../../services/MarvelService";
 
 class CharList extends Component{
     state = {
-        chars: []
+        chars: [],
+        loading: true
     }
     marvelService = new MarvelService();
 
@@ -13,7 +15,10 @@ class CharList extends Component{
     }
 
     onCharsLoaded = (chars) =>{
-        this.setState({chars});
+        this.setState({
+            chars,
+            loading: false
+        });
     }
 
     updateChars = () => {
@@ -56,11 +61,15 @@ class CharList extends Component{
             </li>
     )});
 
-    render(){  
+    render(){
+        const {chars, loading} = this.state;
+        const spinner = loading ? <Spinner/> : null;
+        const content = !loading ? this.renderItems(chars) : null;
         return (
             <div className="char__list">
+                {spinner}
                 <ul className="char__grid">
-                    {this.renderItems(this.state.chars)}
+                    {content}
                 </ul>
                  <button className="button button__main button__long">
                     <div className="inner">load more</div>
