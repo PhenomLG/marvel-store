@@ -1,10 +1,10 @@
-import { Component } from "react";
+import { Component, Fragment } from "react";
 import "./charList.scss";
 import MarvelService from "../../services/MarvelService";
 
 class CharList extends Component{
     state = {
-        chars: [] 
+        chars: []
     }
     marvelService = new MarvelService();
 
@@ -26,15 +26,37 @@ class CharList extends Component{
         });
     }
 
+
+    toggleSelecting = (e) => {
+        let el = e.target;
+        if(e.target.tagName !== "LI")
+            el = e.target.parentNode;
+        
+        switch(e.type){
+            case "mouseenter":
+                el.classList.add("char__item_selected");
+                break;
+            case "mouseleave":
+                el.classList.remove("char__item_selected");
+                break;
+            default:
+        }
+    }
+
     render(){
+
         const getChars = chars => 
             chars.map(item => {
                 const imgStyle = MarvelService.getImageStyle(item.thumbnail);
                 return (
-                <li key={item.id} className="char__item">
-                    <img src={item.thumbnail} alt={item.name} style={imgStyle} className="char__img" />
-                    <div className="char__title">{item.name}</div>
-                </li>
+                    <li onMouseEnter={(e) => {this.toggleSelecting(e)}}
+                        onMouseLeave={(e) => {this.toggleSelecting(e)}}
+                        key={item.id} 
+                        className="char__item">
+                        <img src={item.thumbnail} alt={item.name} style={imgStyle} className="char__img" />
+                        <div className="char__title">{item.name}</div>
+                    </li>
+
             )})
         
         return (
