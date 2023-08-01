@@ -37,6 +37,15 @@ class MarvelService {
             wiki: char.urls[1].url,
         }
     }
+
+
+    static getImageStyle = (imgPath) => {
+        if(imgPath === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg")
+            return {objectFit: "contain"}
+        return null;
+    }
+
+
 }
 
 export default MarvelService;

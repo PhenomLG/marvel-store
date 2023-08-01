@@ -1,5 +1,4 @@
 import { Component } from 'react';
-
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 import MarvelService from '../../services/MarvelService';
@@ -14,6 +13,7 @@ class RandomChar extends Component {
         error: false
     }
     marvelService = new MarvelService();
+
     onCharLoaded = (char) => { 
         this.setState(
             {
@@ -30,8 +30,7 @@ class RandomChar extends Component {
             });
     }
 
-    constructor(props){
-        super(props);
+    componentDidMount(){
         this.updateChar();
     }
 
@@ -57,7 +56,7 @@ class RandomChar extends Component {
                 <div className="randomchar__static">
                         <p className="randomchar__title">Random character for today!<br/>Do you want to get to know him better?</p>
                         <p className="randomchar__title">Or choose another one</p>
-                        <button className="button button__main">
+                        <button onClick={this.updateChar} className="button button__main">
                             <div className="inner">try it</div>
                         </button>
                         <img className='randomchar__decoration' src={mjolnir} alt="mjolnir" />   
@@ -71,15 +70,14 @@ class RandomChar extends Component {
 const View = ({char}) => {
     const {name, thumbnail, homepage, wiki} = char;
     let {description} = char;
+    const imgStyle = MarvelService.getImageStyle(thumbnail);
     if(description === ""){
         description = "Данные об этом персонаже еще не были добавлены.";
     }
 
     return (
     <div className="randomchar__block">
-        <div className="randomchar__img">
-            <img className='randomchar__img' src={thumbnail} alt="thor"/>
-        </div>
+        <img className="randomchar__img" style={imgStyle} src={thumbnail} alt="thor"/>
         <div className="randomchar__info">
             <p className="randomchar__name">{name}</p>
             <p className="randomchar__descr">{description}</p>
@@ -95,5 +93,6 @@ const View = ({char}) => {
     </div>
     )
 }
+
 
 export default RandomChar;

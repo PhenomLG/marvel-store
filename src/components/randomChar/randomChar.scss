@@ -15,11 +15,7 @@
     &__img{
         width: 180px;
         height: 180px;
-
-        img{
-            object-fit: cover;
-        }
-
+        object-fit: cover;
     }
 
     &__info{
