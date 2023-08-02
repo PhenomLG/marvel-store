@@ -9,12 +9,26 @@ class CharList extends Component{
         loading: true,
         newItemLoading: false,
         offset: 210,
-        charEnded: false // Отвечает за отсуствие новых пперсонажей при загрузке
+        charEnded: false, // Отвечает за отсуствие новых пперсонажей при загрузке
+
     }
     marvelService = new MarvelService();
 
     componentDidMount(){
         this.onRequest();
+        window.addEventListener('scroll', this.onEndOfPage);
+    }
+
+    componentWillUnmount(){
+        window.removeEventListener('scroll', this.onEndOfPage);
+    }
+
+    onEndOfPage = () => {
+        // остаток до нижней границы документа
+        let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom;
+        // если пользователь прокрутил достаточно далеко (< 100px до конца)
+        if (!this.state.newItemLoading && windowRelativeBottom < document.documentElement.clientHeight + 100) 
+            this.onRequest(this.state.offset);    
     }
 
     onRequest = (offset) => {
