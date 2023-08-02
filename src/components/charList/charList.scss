@@ -2,9 +2,7 @@
 
 .char{
 
-    &__list{
-    }
-    
+
     &__content {
         margin-top: 50px;
         display: grid;
@@ -24,6 +22,7 @@
     &__item{
         background-color: $dark;
         height: 318px;
+        cursor: pointer;
         transition: 0.3s transform;
 
         &_selected {
