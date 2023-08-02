@@ -26,6 +26,12 @@
         transition: 0.3s transform;
 
         &_selected {
+            //box-shadow: 0 5px 20px $main-color;
+            filter: grayscale(100%);
+            //transform: translateY(-8px);
+        }
+
+        &_pointed {
             box-shadow: 0 5px 20px $main-color;
             transform: translateY(-8px);
         }

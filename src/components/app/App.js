@@ -4,6 +4,8 @@ import AppHeader from '../appHeader/appHeader';
 import RandomChar from '../randomChar/randomChar';
 import CharList from '../charList/charList';
 import CharInfo from '../charInfo/charInfo';
+import ErrorBoundary from '../errorBoundary/errorBoundary';
+
 import decoration from '../../resources/img/vision.png';
 
 
@@ -13,7 +15,6 @@ class App extends Component {
   }
 
   onCharSelected = (id) => {
-    console.log(id);
     this.setState({
       selectedChar: id
     })
@@ -24,10 +25,16 @@ class App extends Component {
       <div className="app">
         <AppHeader/>
           <main>
-              <RandomChar/>
+              <ErrorBoundary>
+                  <RandomChar/>
+              </ErrorBoundary>
               <div className="char__content">
-                  <CharList onCharSelected={this.onCharSelected}/>
-                  <CharInfo charId = {this.state.selectedChar}/>
+                  <ErrorBoundary>
+                      <CharList onCharSelected={this.onCharSelected}/>
+                  </ErrorBoundary>
+                  <ErrorBoundary>
+                      <CharInfo charId = {this.state.selectedChar}/>
+                  </ErrorBoundary>
               </div>
               <img className="bg-decoration" src={decoration} alt="vision"/>
           </main>

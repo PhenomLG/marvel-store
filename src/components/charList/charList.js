@@ -59,9 +59,7 @@ class CharList extends Component{
     }
 
     toggleSelecting = (e) => {
-        let el = e.target;
-        if(e.target.tagName !== "LI")
-            el = e.target.parentNode;
+        let el = e.target.tagName !== "LI" ? e.target.closest('li') : e.target;
         
         switch(e.type){
             case "mouseenter":
