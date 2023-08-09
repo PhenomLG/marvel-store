@@ -72,15 +72,44 @@ class CharList extends Component{
         }
     }
 
+    itemRefs = []
+    setRefs = (ref) => {
+        this.itemRefs.push(ref);
+    }
+
+    onCharSelected = (i) => {
+        this.itemRefs.forEach(item => item.classList.remove("char__item_selected"));
+        this.itemRefs[i].classList.add("char__item_selected");
+        this.itemRefs[i].focus();
+        console.log(this.itemRefs[i]);
+    }
+
+
+
     // формирование массива элементов li
     renderItems = chars => 
-    chars.map(item => {
+    chars.map((item, i) => {
         const imgStyle = MarvelService.getImageStyle(item.thumbnail);
 
         return (
-            <li onMouseEnter={(e) => {this.onPointed(e)}}
+            <li 
+                ref={this.setRefs}
+                tabIndex={0}
+                onMouseEnter={(e) => {this.onPointed(e)}}
                 onMouseLeave={(e) => {this.onPointed(e)}}
-                onClick={() => this.props.onCharSelected(item.id)}
+                onClick={() => 
+                    {
+                        this.props.onCharSelected(item.id);
+                        this.onCharSelected(i);
+                    }}
+                onKeyDown={(e) => {
+                    if(e.code === " " || e.code === "Enter")
+                    {   
+                        this.props.onCharSelected(item.id);
+                        this.onCharSelected(i);
+                    }
+
+                }}
                 key={item.id} 
                 className="char__item">
                 <img src={item.thumbnail} alt={item.name} style={imgStyle} className="char__img" />
