@@ -58,15 +58,15 @@ class CharList extends Component{
         }));
     }
 
-    toggleSelecting = (e) => {
+    onPointed = (e) => {
         let el = e.target.tagName !== "LI" ? e.target.closest('li') : e.target;
         
         switch(e.type){
             case "mouseenter":
-                el.classList.add("char__item_selected");
+                el.classList.add("char__item_pointed");
                 break;
             case "mouseleave":
-                el.classList.remove("char__item_selected");
+                el.classList.remove("char__item_pointed");
                 break;
             default:
         }
@@ -78,8 +78,8 @@ class CharList extends Component{
         const imgStyle = MarvelService.getImageStyle(item.thumbnail);
 
         return (
-            <li onMouseEnter={(e) => {this.toggleSelecting(e)}}
-                onMouseLeave={(e) => {this.toggleSelecting(e)}}
+            <li onMouseEnter={(e) => {this.onPointed(e)}}
+                onMouseLeave={(e) => {this.onPointed(e)}}
                 onClick={() => this.props.onCharSelected(item.id)}
                 key={item.id} 
                 className="char__item">
