@@ -1,64 +1,59 @@
-import { Component } from "react";
+import { useState, useEffect, useRef } from "react";
 import Spinner from "../spinner/spinner";
-import "./charList.scss";
 import MarvelService from "../../services/MarvelService";
+import "./charList.scss";
 
-class CharList extends Component{
-    state = {
-        chars: [],
-        loading: true,
-        newItemLoading: false,
-        offset: 210,
-        charEnded: false, // Отвечает за отсуствие новых пперсонажей при загрузке
 
-    }
-    marvelService = new MarvelService();
+const CharList = (props) => {
+    const [chars, setChars] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [newItemLoading, setNewItemLoading] = useState(false);
+    const [offset, setOffset] = useState(210);
+    const [charEnded, setCharEnded] = useState(false);
 
-    componentDidMount(){
-        this.onRequest();
-        window.addEventListener('scroll', this.onEndOfPage);
-    }
+    const marvelService = new MarvelService();
 
-    componentWillUnmount(){
-        window.removeEventListener('scroll', this.onEndOfPage);
-    }
+    useEffect(() => {
+        console.log('Запускаю запрос');
+        onRequest();
+    }, [])
 
-    onEndOfPage = () => {
-        // остаток до нижней границы документа
-        let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom;
-        // если пользователь прокрутил достаточно далеко (< 100px до конца)
-        if (!this.state.newItemLoading && windowRelativeBottom < document.documentElement.clientHeight + 100) 
-            this.onRequest(this.state.offset);    
-    }
-
-    onRequest = (offset) => {
-        this.onCharListLoading();
-        this.marvelService.getAllCharacters(offset)
+    const onRequest = (offset) => {
+        onCharListLoading();
+        marvelService.getAllCharacters(offset)
             .then(chars => {
-                this.onCharsLoaded(chars);
+                onCharsLoaded(chars);
             });
     }
 
-    onCharListLoading = () => {
-        this.setState({
-            newItemLoading: true})
+    // const onEndOfPage = () => {
+    //     // остаток до нижней границы документа
+    //     let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom;
+    //     // если пользователь прокрутил достаточно далеко (< 100px до конца)
+    //     if (!newItemLoading && windowRelativeBottom < document.documentElement.clientHeight + 100) 
+    //         onRequest(offset);    
+    // }
+
+
+
+    const onCharListLoading = () => {
+        setNewItemLoading(true);
     }
 
-    onCharsLoaded = (newChars) =>{
+    const onCharsLoaded = (newChars) =>{
         let ended = false;
         if(newChars.length < 9)
             ended = true;
-        
-        this.setState(({offset, chars}) => ({
-            chars: [...chars, ...newChars],
-            loading: false,
-            newItemLoading: false,
-            offset: offset + 9,
-            charEnded: ended
-        }));
+
+        setChars(chars => [...chars, ...newChars]);
+        setLoading(false);
+        setNewItemLoading(false);
+        setOffset(offset => offset + 9);
+        setCharEnded(ended);
+
     }
 
-    onPointed = (e) => {
+    const onPointed = (e) => {
         let el = e.target.tagName !== "LI" ? e.target.closest('li') : e.target;
         
         switch(e.type){
@@ -72,72 +67,64 @@ class CharList extends Component{
         }
     }
 
-    itemRefs = []
-    setRefs = (ref) => {
-        this.itemRefs.push(ref);
+    const itemRefs = useRef([]);
+
+    const onCharSelected = (i) => {
+        itemRefs.current.forEach(item => item.classList.remove("char__item_selected"));
+        itemRefs.current[i].classList.add("char__item_selected");
+        itemRefs.current[i].focus();
     }
-
-    onCharSelected = (i) => {
-        this.itemRefs.forEach(item => item.classList.remove("char__item_selected"));
-        this.itemRefs[i].classList.add("char__item_selected");
-        this.itemRefs[i].focus();
-        console.log(this.itemRefs[i]);
-    }
-
-
 
     // формирование массива элементов li
-    renderItems = chars => 
-    chars.map((item, i) => {
-        const imgStyle = MarvelService.getImageStyle(item.thumbnail);
+    function renderItems(chars){
+        return chars.map((item, i) => {
+            const imgStyle = MarvelService.getImageStyle(item.thumbnail);
 
-        return (
-            <li 
-                ref={this.setRefs}
-                tabIndex={0}
-                onMouseEnter={(e) => {this.onPointed(e)}}
-                onMouseLeave={(e) => {this.onPointed(e)}}
-                onClick={() => 
-                    {
-                        this.props.onCharSelected(item.id);
-                        this.onCharSelected(i);
+            return (
+                <li 
+                    ref={el => itemRefs.current[i] = el}
+                    tabIndex={0}
+                    onMouseEnter={(e) => {onPointed(e)}}
+                    onMouseLeave={(e) => {onPointed(e)}}
+                    onClick={() => 
+                        {
+                            props.onCharSelected(item.id);
+                            onCharSelected(i);
+                        }}
+                    onKeyDown={(e) => {
+                        if(e.code === " " || e.code === "Enter")
+                        {   
+                            props.onCharSelected(item.id);
+                            onCharSelected(i);
+                        }
+
                     }}
-                onKeyDown={(e) => {
-                    if(e.code === " " || e.code === "Enter")
-                    {   
-                        this.props.onCharSelected(item.id);
-                        this.onCharSelected(i);
-                    }
-
-                }}
-                key={item.id} 
-                className="char__item">
-                <img src={item.thumbnail} alt={item.name} style={imgStyle} className="char__img" />
-                <div className="char__title">{item.name}</div>
-            </li>
-    )});
-
-    render(){
-        const {chars, loading, newItemLoading, offset, charEnded} = this.state;
-        const spinner = loading ? <Spinner/> : null;
-        const content = !loading ? this.renderItems(chars) : null;
-        return (
-            <div className="char__list">
-                {spinner}
-                <ul className="char__grid">
-                    {content}
-                </ul>
-                 <button 
-                    className="button button__main button__long"
-                    disabled={newItemLoading}
-                    style={{'display': charEnded ? 'none' : 'block'}}
-                    onClick={() => this.onRequest(offset)}
-                    >
-                    <div className="inner">load more</div>
-                </button>
-            </div>
-        )
+                    key={item.id} 
+                    className="char__item">
+                    <img src={item.thumbnail} alt={item.name} style={imgStyle} className="char__img" />
+                    <div className="char__title">{item.name}</div>
+                </li>
+        )});
     }
+
+    const spinner = loading ? <Spinner/> : null;
+    const content = !loading ? renderItems(chars) : null;
+    return (
+        <div className="char__list">
+            {spinner}
+            <ul className="char__grid">
+                {content}
+            </ul>
+            <button 
+                className="button button__main button__long"
+                disabled={newItemLoading}
+                style={{'display': charEnded ? 'none' : 'block'}}
+                onClick={() => onRequest(offset)}>
+                <div className="inner">load more</div>
+            </button>
+        </div>
+    )
+    
 }
 
 export default CharList;
