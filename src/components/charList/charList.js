@@ -1,43 +1,29 @@
 import { useState, useEffect, useRef } from "react";
 import Spinner from "../spinner/spinner";
-import MarvelService from "../../services/MarvelService";
 import "./charList.scss";
+import useMarvelService from "../../services/MarvelService";
+import Utils from "../../services/Utils";
+import ErrorMessage from "../errorMessage/errorMessage";
 
 
 const CharList = (props) => {
     const [chars, setChars] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [newItemLoading, setNewItemLoading] = useState(false);
     const [offset, setOffset] = useState(210);
     const [charEnded, setCharEnded] = useState(false);
 
-    const marvelService = new MarvelService();
+    const { loading, error, getAllCharacters } = useMarvelService();
 
     useEffect(() => {
         console.log('Запускаю запрос');
-        onRequest();
+        onRequest(offset, true);
     }, [])
 
-    const onRequest = (offset) => {
-        onCharListLoading();
-        marvelService.getAllCharacters(offset)
-            .then(chars => {
-                onCharsLoaded(chars);
-            });
-    }
-
-    // const onEndOfPage = () => {
-    //     // остаток до нижней границы документа
-    //     let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom;
-    //     // если пользователь прокрутил достаточно далеко (< 100px до конца)
-    //     if (!newItemLoading && windowRelativeBottom < document.documentElement.clientHeight + 100) 
-    //         onRequest(offset);    
-    // }
-
-
-
-    const onCharListLoading = () => {
+    const onRequest = (offset, initial) => {
+        initial ? setNewItemLoading(false) : setNewItemLoading(true);
         setNewItemLoading(true);
+        getAllCharacters(offset)
+            .then(onCharsLoaded);
     }
 
     const onCharsLoaded = (newChars) =>{
@@ -46,7 +32,6 @@ const CharList = (props) => {
             ended = true;
 
         setChars(chars => [...chars, ...newChars]);
-        setLoading(false);
         setNewItemLoading(false);
         setOffset(offset => offset + 9);
         setCharEnded(ended);
@@ -78,7 +63,7 @@ const CharList = (props) => {
     // формирование массива элементов li
     function renderItems(chars){
         return chars.map((item, i) => {
-            const imgStyle = MarvelService.getImageStyle(item.thumbnail);
+            const imgStyle = Utils.getImageStyle(item.thumbnail);
 
             return (
                 <li 
@@ -107,13 +92,17 @@ const CharList = (props) => {
         )});
     }
 
-    const spinner = loading ? <Spinner/> : null;
-    const content = !loading ? renderItems(chars) : null;
+    const items = renderItems(chars);
+    const errorMessage = error ? <ErrorMessage/> : null;
+    const spinner = loading && !newItemLoading ? <Spinner/> : null;
+
+
     return (
         <div className="char__list">
+            {errorMessage}
             {spinner}
             <ul className="char__grid">
-                {content}
+                {items}
             </ul>
             <button 
                 className="button button__main button__long"

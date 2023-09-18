@@ -1,36 +1,24 @@
-
-class MarvelService {
-    _apiBase = "https://gateway.marvel.com:443/v1/public/";
-    _apiKey = "apikey=688c9526fa514d12fbc9d66989424c8c";
-    _baseOffset = 210;
+import { useHttp} from "../hooks/http.hook";
 
 
-    getResource = async (url) => {
-        let result = await fetch(url);
-        if(!result.ok)
-            throw new Error(`Could not fetch ${url}, status: ${result.status}`);
-        return await result.json();
+const useMarvelService  = () => {
+    const {loading, request, error, clearError} = useHttp();
+    const apiBase = "https://gateway.marvel.com:443/v1/public/";
+    const apiKey = "apikey=688c9526fa514d12fbc9d66989424c8c";
+    const baseOffset = 210;
+
+
+    const getAllCharacters = async (offset = baseOffset) => {
+        const res = await request(`${apiBase}characters?limit=9&offset=${offset}&${apiKey}`);
+        return res.data.results.map(_transformCharacter);
     }
 
-    getAllCharacters = async (offset = this._baseOffset) => {
-        const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=${offset}&${this._apiKey}`);
-        return res.data.results.map(this._transformCharacter);
+    const getCharacter = async (id) => {
+        let res = await request(`${apiBase}characters/${id}?${apiKey}`);
+        return _transformCharacter(res.data.results[0]);
     }
 
-    getCharacter = async (id) => {
-        let res = await this.getResource(`${this._apiBase}characters/${id}?${this._apiKey}`);
-        return this._transformCharacter(res.data.results[0]);
-        // if(res.data.results[0].description !== "")
-        // {
-        //     return this._transformCharacter(res.data.results[0]);
-        // }
-        // else{
-        //     res = this.getCharacter(Math.floor(Math.random() * (1011400 - 1011000) + 1011000))
-        //     return res;
-        // }
-    }
-
-    _transformCharacter = (char) => {
+    const _transformCharacter = (char) => {
         return {
             id: char.id,
             name: char.name,
@@ -42,14 +30,7 @@ class MarvelService {
         }
     }
 
-
-    static getImageStyle = (imgPath) => {
-        if(imgPath === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg")
-            return {objectFit: "unset"}
-        return {objectFit: "cover"};
-    }
-
-
+    return { loading, error,  getAllCharacters, getCharacter, clearError};
 }
 
-export default MarvelService;
+export default useMarvelService;

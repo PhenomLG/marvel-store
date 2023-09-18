@@ -5,40 +5,28 @@ import ErrorMessage from "../errorMessage/errorMessage";
 import Skeleton from "../skeleton/skeleton";
 
 import "./charInfo.scss";
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/MarvelService";
+import Utils from "../../services/Utils";
 
 
 
 const CharInfo = (props) => {
     const [char, setChar] = useState(null);
-    const [loading, setLoading] = useState(null);
-    const [error, setError] = useState(null);
-
-    const marvelService = new MarvelService();
+    const {loading, error, getCharacter, clearError} = useMarvelService();
 
     const updateChar = () => {
+
         const {charId} = props;
         if(!charId)
             return;
         
-        onCharLoading();
-        marvelService
-            .getCharacter(charId)
-            .then(onCharLoaded)
-            .catch(onError);  
+        clearError();
+        getCharacter(charId)
+            .then(onCharLoaded);
     }
 
     const onCharLoaded = (char) => { 
         setChar(char);
-        setLoading(false);
-    }
-
-    const onCharLoading = () => setLoading(true);
-    
-
-    const onError = () => {
-        setLoading(false);
-        setError(true);
     }
 
     useEffect(() => {
@@ -67,7 +55,7 @@ const CharInfo = (props) => {
 
 const View = ({char}) => {
     const {name, description, thumbnail, homepage, wiki, comics} = char;
-    const imgStyle = MarvelService.getImageStyle(thumbnail);
+    const imgStyle = Utils.getImageStyle(thumbnail);
     return (
         <>
             <div className="char__card">

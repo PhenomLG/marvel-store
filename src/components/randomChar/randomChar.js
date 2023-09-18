@@ -1,28 +1,18 @@
 import { useState, useEffect } from 'react';
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
-import MarvelService from '../../services/MarvelService';
 
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
+import useMarvelService from "../../services/MarvelService";
+import Utils from "../../services/Utils";
 
 const RandomChar = () => {
     const [char, setChar] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-    
-    const marvelService = new MarvelService();
+    const  { loading, error, getCharacter, clearError} = useMarvelService();
 
     const onCharLoaded = (char) => { 
         setChar(char);
-        setLoading(false);
-    }
-
-    const onCharLoading = () => setLoading(true);
-    
-    const onError = () => {
-        setLoading(false);
-        setError(true);
     }
 
     useEffect(() => {
@@ -30,14 +20,11 @@ const RandomChar = () => {
     }, []);
 
     const updateChar = () => {
+        clearError();
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-        onCharLoading();
-        marvelService
-            .getCharacter(id)
-            .then(onCharLoaded)
-            .catch(onError);
+        getCharacter(id)
+            .then(onCharLoaded);
     }
-
 
     const errorMessage = error ? <ErrorMessage/> : null;
     const spinner = loading ? <Spinner/> : null;
@@ -63,7 +50,7 @@ const RandomChar = () => {
 const View = ({char}) => {
     const {name, thumbnail, homepage, wiki} = char;
     let {description} = char;
-    const imgStyle = MarvelService.getImageStyle(thumbnail);
+    const imgStyle = Utils.getImageStyle(thumbnail);
     if(description === ""){
         description = "Данные об этом персонаже еще не были добавлены.";
     }
